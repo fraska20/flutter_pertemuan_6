@@ -13,11 +13,11 @@ class PageDetalListUsers extends StatelessWidget {
         appBar: AppBar(
           title: Text("Detail User"),
         ),
-        body: _builListUsersBody(idUsers));
+        body: _builListDetailUsersBody(idUsers));
   }
 }
 
-Widget _builListUsersBody(id) {
+Widget _builListDetailUsersBody(id) {
   return Container(
     child: FutureBuilder(
       future: ApiDataSource.instance.LoadDetailUsers(id),
@@ -27,9 +27,9 @@ Widget _builListUsersBody(id) {
         }
 
         if (snapshot.hasData) {
-          UsersDetailModel usersModel =
+          UsersDetailModel usersDetailModel =
               UsersDetailModel.fromJson(snapshot.data);
-          return _buildSuccesSection(usersModel);
+          return _buildSuccesSection(usersDetailModel);
         }
 
         return _buildLoadingSection();
@@ -39,11 +39,33 @@ Widget _builListUsersBody(id) {
 }
 
 Widget _buildSuccesSection(UsersDetailModel user) {
-  return ListView.builder(
-    itemCount: user.data!.length,
-    itemBuilder: (context, index) {
-      return _buildItemsUsers(user.data![index], context);
-    },
+  return Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          width: 200,
+          height: 200,
+          child: CircleAvatar(
+            backgroundImage: NetworkImage(user.data!.avatar!),
+          ),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Text(
+          user.data!.firstName! + " " + user.data!.lastName!,
+          style: TextStyle(fontSize: 24),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Text(
+          user.data!.email!,
+          style: TextStyle(fontSize: 18),
+        ),
+      ],
+    ),
   );
 }
 
